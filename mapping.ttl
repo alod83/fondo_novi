@@ -1,0 +1,391 @@
+@prefix fondonl: <> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix d2rq: <http://www.wiwiss.fu-berlin.de/suhl/bizer/D2RQ/0.1#> .
+@prefix jdbc: <http://d2rq.org/terms/jdbc/> .
+
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix dbpedia: <http://dbpedia.org/resource/> .
+@prefix map: <#> .
+@prefix bibo: <http://purl.org/ontology/bibo/> .
+
+@prefix void: <http://rdfs.org/ns/void#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+
+@prefix d2r: <http://sites.wiwiss.fu-berlin.de/suhl/bizer/d2r-server/config.rdf#> .
+
+@prefix edm: <http://www.europeana.eu/schemas/edm/> .
+@prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix dbo: <http://dbpedia.org/ontology/> .
+@prefix oa: <http://www.w3.org/ns/oa#> .
+
+@prefix pico: <http://www.culturaitalia.it/opencms/export/sites/culturaitalia/attachments/thesaurus/4.3/thesaurus_4.3.0.skos.xml#> .
+
+<> a d2r:Server;
+	rdfs:label "Fondo antico Novi Ligure";
+	#d2r:baseURI <http://fondonoviligure.it/dataset/>;
+	d2r:baseURI <http://localhost:2020/>;
+	#d2r:port 2020;
+	d2r:vocabularyIncludeInstances true;
+  
+	d2r:sparqlTimeout 300;
+	d2r:pageTimeout 5;
+.
+
+map:database a d2rq:Database;
+	d2rq:jdbcDriver "com.mysql.jdbc.Driver";
+	d2rq:jdbcDSN "jdbc:mysql://localhost/fondo_lod";
+	d2rq:username "root";
+	jdbc:autoReconnect "true";
+	jdbc:zeroDateTimeBehavior "convertToNull";
+	.
+
+# Date
+map:date a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "date/@@date.id_data@@";
+	d2rq:class dc:date;
+	d2rq:classDefinitionLabel "date";
+	.
+map:date__label a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:date;
+	d2rq:property skos:prefLabel;
+	d2rq:pattern "date #@@date.id_data@@";
+	.
+map:date_id_data a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:date;
+	d2rq:property dc:identifier;
+	d2rq:propertyDefinitionLabel "date id_data";
+	d2rq:column "date.id_data";
+	d2rq:datatype xsd:integer;
+	.
+map:date_tipo a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:date;
+	d2rq:property edm:hasType;
+	d2rq:propertyDefinitionLabel "date tipo";
+	d2rq:column "date.tipo";
+	.
+map:date_anno a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:date;
+	d2rq:property edm:year;
+	d2rq:propertyDefinitionLabel "date anno";
+	d2rq:condition "date.anno != ''";
+	d2rq:column "date.anno";
+	.
+map:date_mese a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:date;
+	d2rq:property edm:month;
+	d2rq:propertyDefinitionLabel "date mese";
+	d2rq:condition "date.mese != ''";
+	d2rq:column "date.mese";
+	.
+map:date_giorno a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:date;
+	d2rq:property edm:day;
+	d2rq:propertyDefinitionLabel "date giorno";
+	d2rq:condition "date.giorno != ''";
+	d2rq:column "date.giorno";
+	.
+map:date_data a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:date;
+	d2rq:property dc:date;
+	d2rq:propertyDefinitionLabel "date data";
+	d2rq:condition "date.data != ''";
+	d2rq:column "date.data";
+	.
+map:date_DBpedia_link_data a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:date;
+	d2rq:property dc:date;
+	d2rq:propertyDefinitionLabel "date DBpedia_link_data";
+	d2rq:condition "date.DBpedia_link_data != ''";
+	d2rq:uriColumn "date.DBpedia_link_data";
+	.
+map:date_anno_iniziale a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:date;
+	d2rq:property edm:year;
+	d2rq:property edm:begin;
+	d2rq:propertyDefinitionLabel "date anno_iniziale";
+	d2rq:condition "date.anno_iniziale != ''";
+	d2rq:column "date.anno_iniziale";
+	.
+map:date_mese_iniziale a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:date;
+	d2rq:property edm:month;
+	d2rq:property edm:begin;
+	d2rq:propertyDefinitionLabel "date mese_iniziale";
+	d2rq:condition "date.mese_iniziale != ''";
+	d2rq:column "date.mese_iniziale";
+	.
+map:date_giorno_iniziale a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:date;
+	d2rq:property edm:day;
+	d2rq:property edm:begin;
+	d2rq:propertyDefinitionLabel "date giorno_iniziale";
+	d2rq:condition "date.giorno_iniziale != ''";
+	d2rq:column "date.giorno_iniziale";
+	.
+map:date_data_iniziale a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:date;
+	d2rq:property dc:date;
+	d2rq:property edm:begin;
+	d2rq:propertyDefinitionLabel "date data_iniziale";
+	d2rq:condition "date.data_iniziale != ''";
+	d2rq:column "date.data_iniziale";
+	.
+map:date_anno_finale a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:date;
+	d2rq:property edm:year;
+	d2rq:property edm:end;
+	d2rq:propertyDefinitionLabel "date anno_finale";
+	d2rq:condition "date.anno_finale != ''";
+	d2rq:column "date.anno_finale";
+	.
+map:date_mese_finale a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:date;
+	d2rq:property edm:month;
+	d2rq:property edm:end;
+	d2rq:propertyDefinitionLabel "date mese_finale";
+	d2rq:condition "date.mese_finale != ''";
+	d2rq:column "date.mese_finale";
+	.
+map:date_giorno_finale a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:date;
+	d2rq:property edm:day;
+	d2rq:property edm:end;
+	d2rq:propertyDefinitionLabel "date giorno_finale";
+	d2rq:condition "date.giorno_finale != ''";
+	d2rq:column "date.giorno_finale";
+	.
+map:date_data_finale a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:date;
+	d2rq:property dc:date;
+	d2rq:property edm:end;
+	d2rq:propertyDefinitionLabel "date data_finale";
+	d2rq:condition "date.data_finale != ''";
+	d2rq:column "date.data_finale";
+	.
+map:date_intervallo a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:date;
+	d2rq:property dcterms:temporal;
+	d2rq:propertyDefinitionLabel "date intervallo";
+	d2rq:condition "date.intervallo != ''";
+	d2rq:column "date.intervallo";
+	.
+	
+# Luoghi
+map:luoghi a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "luoghi/@@luoghi.id_luogo@@";
+	d2rq:class edm:Place;
+	d2rq:class dc:coverage;
+	d2rq:classDefinitionLabel "luoghi";
+	.
+map:luoghi__label a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:luoghi;
+	d2rq:property skos:prefLabel;
+	d2rq:pattern "luoghi #@@luoghi.id_luogo@@";
+	.
+map:luoghi_id_luogo a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:luoghi;
+	d2rq:property dc:identifier;
+	d2rq:propertyDefinitionLabel "luoghi id_luogo";
+	d2rq:column "luoghi.id_luogo";
+	d2rq:datatype xsd:integer;
+	.
+map:luoghi_lat a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:luoghi;
+	d2rq:property geo:lat;
+	d2rq:property dcterms:spatial;
+	d2rq:propertyDefinitionLabel "luoghi lat";
+	d2rq:column "luoghi.lat";
+	d2rq:datatype xsd:double;
+	.
+map:luoghi_long a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:luoghi;
+	d2rq:property geo:long;
+	d2rq:property dcterms:spatial;
+	d2rq:propertyDefinitionLabel "luoghi long";
+	d2rq:column "luoghi.long";
+	d2rq:datatype xsd:double;
+	.
+map:luoghi_luogo a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:luoghi;
+	d2rq:property rdfs:label;
+	d2rq:propertyDefinitionLabel "luoghi luogo";
+	d2rq:column "luoghi.luogo";
+	.
+map:luoghi_Wikidata_link a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:luoghi;
+	d2rq:property owl:sameAs;
+	d2rq:propertyDefinitionLabel "luoghi Wikidata_link";
+	d2rq:condition "luoghi.Wikidata_link != ''";
+	d2rq:uriColumn "luoghi.Wikidata_link";
+	.
+map:luoghi_GND_link a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:luoghi;
+	d2rq:property owl:sameAs;
+	d2rq:propertyDefinitionLabel "luoghi GND_link";
+	d2rq:condition "luoghi.GND_link != ''";
+	d2rq:uriColumn "luoghi.GND_link";
+	.
+map:luoghi_DBpedia_link a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:luoghi;
+	d2rq:property owl:sameAs;
+	d2rq:propertyDefinitionLabel "luoghi DBpedia_link";
+	d2rq:condition "luoghi.DBpedia_link != ''";
+	d2rq:uriColumn "luoghi.DBpedia_link";
+	.
+
+# Mapping-date-ogg (n:m)
+map:mapping-date-ogg__link a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:oggetti;
+	d2rq:property edm:occurredAt;
+	d2rq:refersToClassMap map:date;
+	d2rq:join "mapping-date-ogg.id_data => date.id_data";
+	d2rq:join "mapping-date-ogg.id_ogg => oggetti.id_ogg";
+	.
+
+# Mapping-luogo-ogg (n:m)
+map:mapping-luogo-ogg__link a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:oggetti;
+	d2rq:property edm:happenedAt;
+	d2rq:refersToClassMap map:luoghi;
+	d2rq:join "mapping-luogo-ogg.id_luogo => luoghi.id_luogo";
+	d2rq:join "mapping-luogo-ogg.id_ogg => oggetti.id_ogg";
+	.
+
+# Mapping-pers-ogg (n:m)
+map:mapping-pers-ogg__link a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:oggetti;
+	d2rq:property skos:related;
+	d2rq:refersToClassMap map:persone;
+	d2rq:join "mapping-pers-ogg.id_ogg => oggetti.id_ogg";
+	d2rq:join "mapping-pers-ogg.id_pers => persone.id_pers";
+	.
+
+# Oggetti
+map:oggetti a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "oggetti/@@oggetti.id_ogg@@";
+	d2rq:class pico:beni_archivistici;
+	d2rq:classDefinitionLabel "oggetti";
+	.
+map:oggetti__label a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:oggetti;
+	d2rq:property skos:prefLabel;
+	d2rq:pattern "oggetti #@@oggetti.id_ogg@@";
+	.
+map:oggetti_id_ogg a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:oggetti;
+	d2rq:property dc:identifier;
+	d2rq:propertyDefinitionLabel "oggetti id_ogg";
+	d2rq:column "oggetti.id_ogg";
+	d2rq:datatype xsd:integer;
+	.
+map:oggetti_serie a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:oggetti;
+	d2rq:property pico:serie_archivistiche;
+	d2rq:propertyDefinitionLabel "oggetti serie";
+	d2rq:column "oggetti.serie";
+	d2rq:datatype xsd:integer;
+	.
+map:oggetti_titolo a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:oggetti;
+	d2rq:property rdfs:label;
+	d2rq:propertyDefinitionLabel "oggetti titolo";
+	d2rq:column "oggetti.titolo";
+	.
+map:oggetti_consistenza_fisica a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:oggetti;
+	d2rq:property dcterms:medium;
+	d2rq:propertyDefinitionLabel "oggetti consistenza_fisica";
+	d2rq:condition "oggetti.consistenza_fisica != ''";
+	d2rq:column "oggetti.consistenza_fisica";
+	.
+map:oggetti_DBpedia_link_consistenza_fisica a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:oggetti;
+	d2rq:property dcterms:medium;
+	d2rq:propertyDefinitionLabel "oggetti DBpedia_link_consistenza_fisica";
+	d2rq:condition "oggetti.DBpedia_link_consistenza_fisica != ''";
+	d2rq:uriColumn "oggetti.DBpedia_link_consistenza_fisica";
+	.
+map:oggetti_lingua  a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:oggetti;
+	d2rq:property dc:language;
+	d2rq:propertyDefinitionLabel "oggetti lingua";
+	d2rq:condition "oggetti.lingua != ''";
+	d2rq:column "oggetti.lingua";
+	.
+map:oggetti_DBpedia_link_lingua a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:oggetti;
+	d2rq:property dc:language;
+	d2rq:propertyDefinitionLabel "oggetti DBpedia_link_lingua";
+	d2rq:condition "oggetti.DBpedia_link_lingua != ''";
+	d2rq:uriColumn "oggetti.DBpedia_link_lingua";
+	.
+map:oggetti_seconda_lingua a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:oggetti;
+	d2rq:property dc:language;
+	d2rq:propertyDefinitionLabel "oggetti seconda_lingua";
+	d2rq:condition "oggetti.seconda_lingua != ''";
+	d2rq:column "oggetti.seconda_lingua";
+	.
+map:oggetti_DBpedia_link_lingua2 a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:oggetti;
+	d2rq:property dc:language;
+	d2rq:propertyDefinitionLabel "oggetti DBpedia_link_lingua2";
+	d2rq:condition "oggetti.DBpedia_link_lingua2 != ''";
+	d2rq:uriColumn "oggetti.DBpedia_link_lingua2";
+	.
+
+# Persone
+map:persone a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+	d2rq:uriPattern "persone/@@persone.id_pers@@";
+	d2rq:class foaf:person;
+	d2rq:classDefinitionLabel "persone";
+	.
+map:persone__label a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:persone;
+	d2rq:property rdf:label;
+	d2rq:pattern "persone #@@persone.id_pers@@";
+	.
+map:persone_id_pers a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:persone;
+	d2rq:property dc:identifier;
+	d2rq:propertyDefinitionLabel "persone id_pers";
+	d2rq:column "persone.id_pers";
+	d2rq:datatype xsd:integer;
+	.
+map:persone_persona a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:persone;
+	d2rq:property foaf:name;
+	d2rq:propertyDefinitionLabel "persone persona";
+	d2rq:column "persone.persona";
+	.
+map:persone_GND_link a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:persone;
+	d2rq:property owl:sameAs;
+	d2rq:propertyDefinitionLabel "persone GND_link";
+	d2rq:condition "persone.GND_link != ''";
+	d2rq:uriColumn "persone.GND_link";
+	.
+map:persone_DBpedia_link a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:persone;
+	d2rq:property owl:sameAs;
+	d2rq:propertyDefinitionLabel "persone DBpedia_link";
+	d2rq:condition "persone.DBpedia_link != ''";
+	d2rq:uriColumn "persone.DBpedia_link";
+	.
+map:persone_VIAF_link a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:persone;
+	d2rq:property owl:sameAs;
+	d2rq:propertyDefinitionLabel "persone VIAF_link";
+	d2rq:condition "persone.VIAF_link != ''";
+	d2rq:uriColumn "persone.VIAF_link";
+	.
+
